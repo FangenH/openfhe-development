@@ -382,9 +382,11 @@ std::shared_ptr<std::vector<DCRTPoly>> KeySwitchHYBRID::EvalKeySwitchPrecomputeC
 
     for (uint32_t part = 0; part < numPartQl; part++) {
         auto partCtClone = partsCt[part].Clone();
+        // Perform iNTT?
         partCtClone.SetFormat(Format::COEFFICIENT);
 
         uint32_t sizePartQl = partsCt[part].GetNumOfElements();
+        // Fast base conversion?
         partsCtCompl[part]  = partCtClone.ApproxSwitchCRTBasis(
             cryptoParams->GetParamsPartQ(part), cryptoParams->GetParamsComplPartQ(sizeQl - 1, part),
             cryptoParams->GetPartQlHatInvModq(part, sizePartQl - 1),
@@ -392,6 +394,7 @@ std::shared_ptr<std::vector<DCRTPoly>> KeySwitchHYBRID::EvalKeySwitchPrecomputeC
             cryptoParams->GetPartQlHatModp(sizeQl - 1, part),
             cryptoParams->GetmodComplPartqBarrettMu(sizeQl - 1, part));
 
+        // Perform NTT?
         partsCtCompl[part].SetFormat(Format::EVALUATION);
 
         partsCtExt[part] = DCRTPoly(paramsQlP, Format::EVALUATION, true);
@@ -401,6 +404,7 @@ std::shared_ptr<std::vector<DCRTPoly>> KeySwitchHYBRID::EvalKeySwitchPrecomputeC
         for (usint i = 0; i < startPartIdx; i++) {
             partsCtExt[part].SetElementAtIndex(i, partsCtCompl[part].GetElementAtIndex(i));
         }
+        // From StartPartIdx to endPartIdx, contents remain the same.
         for (usint i = startPartIdx, idx = 0; i < endPartIdx; i++, idx++) {
             partsCtExt[part].SetElementAtIndex(i, partsCt[part].GetElementAtIndex(idx));
         }
@@ -417,6 +421,7 @@ std::shared_ptr<std::vector<DCRTPoly>> KeySwitchHYBRID::EvalFastKeySwitchCore(
     const std::shared_ptr<ParmType> paramsQl) const {
     const auto cryptoParams = std::dynamic_pointer_cast<CryptoParametersRNS>(evalKey->GetCryptoParameters());
 
+    // Multiply extended digits with evaluation keys, then sum up.
     std::shared_ptr<std::vector<DCRTPoly>> cTilda = EvalFastKeySwitchCoreExt(digits, evalKey, paramsQl);
 
     PlaintextModulus t = (cryptoParams->GetNoiseScale() == 1) ? 0 : cryptoParams->GetPlaintextModulus();
