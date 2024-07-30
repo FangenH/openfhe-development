@@ -387,6 +387,7 @@ std::shared_ptr<std::vector<DCRTPoly>> KeySwitchHYBRID::EvalKeySwitchPrecomputeC
 
         uint32_t sizePartQl = partsCt[part].GetNumOfElements();
         // Fast base conversion?
+        // At this point I would like to have all input partsCt[0], and corresbonding precomputed results.
         partsCtCompl[part]  = partCtClone.ApproxSwitchCRTBasis(
             cryptoParams->GetParamsPartQ(part), cryptoParams->GetParamsComplPartQ(sizeQl - 1, part),
             cryptoParams->GetPartQlHatInvModq(part, sizePartQl - 1),
