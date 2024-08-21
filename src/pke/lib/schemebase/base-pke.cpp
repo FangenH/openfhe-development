@@ -58,6 +58,7 @@ KeyPair<Element> PKEBase<Element>::KeyGenInternal(CryptoContext<Element> cc, boo
     TugType tug;
 
     // Private Key Generation
+    std::cout << 1 << std::endl;
 
     Element s;
     switch (cryptoParams->GetSecretKeyDist()) {

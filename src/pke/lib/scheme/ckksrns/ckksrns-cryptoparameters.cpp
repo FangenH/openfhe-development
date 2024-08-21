@@ -60,6 +60,7 @@ void CryptoParametersCKKSRNS::PrecomputeCRTTables(KeySwitchTechnique ksTech, Sca
     BigInteger modulusQ = GetElementParams()->GetModulus();
     // Pre-compute values for rescaling
     // modulusQ holds Q^(l) = \prod_{i=0}^{i=l}(q_i).
+    std::cout << "This is where precomputed tables are computed" << std::endl;
     m_QlQlInvModqlDivqlModq.resize(sizeQ - 1);
     m_QlQlInvModqlDivqlModqPrecon.resize(sizeQ - 1);
     m_qlInvModq.resize(sizeQ - 1);
