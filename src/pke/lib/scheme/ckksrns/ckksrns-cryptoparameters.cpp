@@ -49,6 +49,10 @@ void CryptoParametersCKKSRNS::PrecomputeCRTTables(KeySwitchTechnique ksTech, Sca
 
     size_t sizeQ = GetElementParams()->GetParams().size();
 
+    std::cout << sizeQ << std::endl;
+
+    PrintParameters(std::cout);
+
     std::vector<NativeInteger> moduliQ(sizeQ);
     std::vector<NativeInteger> rootsQ(sizeQ);
 
