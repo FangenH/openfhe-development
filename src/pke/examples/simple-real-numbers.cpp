@@ -164,7 +164,7 @@ int main() {
    * in the output of this demo, since CKKS is approximate, zeros are not exact
    * - they're just very small numbers.
    */
-    cc->EvalRotateKeyGen(keys.secretKey, {1, -2});
+    //cc->EvalRotateKeyGen(keys.secretKey, {1, -2});
 
     // Step 3: Encoding and encryption of inputs
 
@@ -186,20 +186,20 @@ int main() {
     // Step 4: Evaluation
 
     // Homomorphic addition
-    auto cAdd = cc->EvalAdd(c1, c2);
+    //auto cAdd = cc->EvalAdd(c1, c2);
 
-    // Homomorphic subtraction
-    auto cSub = cc->EvalSub(c1, c2);
+    //// Homomorphic subtraction
+    //auto cSub = cc->EvalSub(c1, c2);
 
-    // Homomorphic scalar multiplication
-    auto cScalar = cc->EvalMult(c1, 4.0);
+    //// Homomorphic scalar multiplication
+    //auto cScalar = cc->EvalMult(c1, 4.0);
 
     // Homomorphic multiplication
     auto cMul = cc->EvalMult(c1, c2);
 
     // Homomorphic rotations
-    auto cRot1 = cc->EvalRotate(c1, 1);
-    auto cRot2 = cc->EvalRotate(c1, -2);
+    //auto cRot1 = cc->EvalRotate(c1, 1);
+    //auto cRot2 = cc->EvalRotate(c1, -2);
 
     // Step 5: Decryption and output
     Plaintext result;
@@ -216,20 +216,20 @@ int main() {
     std::cout << "Estimated precision in bits: " << result->GetLogPrecision() << std::endl;
 
     // Decrypt the result of addition
-    cc->Decrypt(keys.secretKey, cAdd, &result);
-    result->SetLength(batchSize);
-    std::cout << "x1 + x2 = " << result;
-    std::cout << "Estimated precision in bits: " << result->GetLogPrecision() << std::endl;
+    //cc->Decrypt(keys.secretKey, cAdd, &result);
+    //result->SetLength(batchSize);
+    //std::cout << "x1 + x2 = " << result;
+    //std::cout << "Estimated precision in bits: " << result->GetLogPrecision() << std::endl;
 
-    // Decrypt the result of subtraction
-    cc->Decrypt(keys.secretKey, cSub, &result);
-    result->SetLength(batchSize);
-    std::cout << "x1 - x2 = " << result << std::endl;
+    //// Decrypt the result of subtraction
+    //cc->Decrypt(keys.secretKey, cSub, &result);
+    //result->SetLength(batchSize);
+    //std::cout << "x1 - x2 = " << result << std::endl;
 
-    // Decrypt the result of scalar multiplication
-    cc->Decrypt(keys.secretKey, cScalar, &result);
-    result->SetLength(batchSize);
-    std::cout << "4 * x1 = " << result << std::endl;
+    //// Decrypt the result of scalar multiplication
+    //cc->Decrypt(keys.secretKey, cScalar, &result);
+    //result->SetLength(batchSize);
+    //std::cout << "4 * x1 = " << result << std::endl;
 
     // Decrypt the result of multiplication
     cc->Decrypt(keys.secretKey, cMul, &result);
@@ -238,14 +238,14 @@ int main() {
 
     // Decrypt the result of rotations
 
-    cc->Decrypt(keys.secretKey, cRot1, &result);
-    result->SetLength(batchSize);
-    std::cout << std::endl << "In rotations, very small outputs (~10^-10 here) correspond to 0's:" << std::endl;
-    std::cout << "x1 rotate by 1 = " << result << std::endl;
+    //cc->Decrypt(keys.secretKey, cRot1, &result);
+    //result->SetLength(batchSize);
+    //std::cout << std::endl << "In rotations, very small outputs (~10^-10 here) correspond to 0's:" << std::endl;
+    //std::cout << "x1 rotate by 1 = " << result << std::endl;
 
-    cc->Decrypt(keys.secretKey, cRot2, &result);
-    result->SetLength(batchSize);
-    std::cout << "x1 rotate by -2 = " << result << std::endl;
+    //cc->Decrypt(keys.secretKey, cRot2, &result);
+    //result->SetLength(batchSize);
+    //std::cout << "x1 rotate by -2 = " << result << std::endl;
 
     return 0;
 }

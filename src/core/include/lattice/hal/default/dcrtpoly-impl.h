@@ -924,12 +924,24 @@ DCRTPolyImpl<VecType> DCRTPolyImpl<VecType>::ApproxSwitchCRTBasis(
     for (int i=0; i < 8; i++) {
         std::string name = "example_output_";
         std::string name_2 = "postmultiply_";
+        std::string name_3 = "xi_";
+        std::string name_4 = "QHat_";
+        std::string name_5 = "first_step_";
         name = name + std::to_string(i);
         name_2 = name_2 + std::to_string(i);
+        name_3 = name_3 + std::to_string(i);
+        name_4 = name_4 + std::to_string(i);
+        name_5 = name_5 + std::to_string(i);
         std::ofstream file(name);
         std::ofstream file_2(name_2);
+        std::ofstream file_3(name_3);
+        std::ofstream file_4(name_4);
+        std::ofstream file_5(name_5);
         file.close();
         file_2.close();
+        file_3.close();
+        file_4.close();
+        file_5.close();
     }
     // Matrix multiplication
     // For reference
@@ -938,10 +950,19 @@ DCRTPolyImpl<VecType> DCRTPolyImpl<VecType>::ApproxSwitchCRTBasis(
         std::fill(sum.begin(), sum.end(), 0);
         std::string name = "example_output_";
         std::string name_2 = "postmultiply_";
+        std::string name_3 = "xi_";
+        std::string name_4 = "QHat_";
+        std::string name_5 = "first_step_";
         name = name + std::to_string(omp_get_thread_num());
         name_2 = name_2 + std::to_string(omp_get_thread_num());
+        name_3 = name_3 + std::to_string(omp_get_thread_num());
+        name_4 = name_4 + std::to_string(omp_get_thread_num());
+        name_5 = name_5 + std::to_string(omp_get_thread_num());
         std::ofstream myfile (name, std::ios_base::app);
         std::ofstream myfile_2 (name_2, std::ios_base::app);
+        std::ofstream myfile_3 (name_3, std::ios_base::app);
+        std::ofstream myfile_4 (name_4, std::ios_base::app);
+        std::ofstream myfile_5 (name_5, std::ios_base::app);
         myfile << "Ring dimension is " << ringDim << "\nSize Q:" << sizeQ << "\nSize P is:" << sizeP << std::endl;
         myfile << "This is number of thread :" << omp_get_thread_num() << std::endl;
         myfile_2 << "Ring element index: " << ri << std::endl;
@@ -960,6 +981,12 @@ DCRTPolyImpl<VecType> DCRTPolyImpl<VecType>::ApproxSwitchCRTBasis(
             myfile << "Result of step 1 is " << xQHatInvModqi << std::endl;
             myfile << "\nStep 2:" << std::endl;
             myfile_2 << xQHatInvModqi << std::endl;
+            // Output xi
+            myfile_3 << xi << std::endl;
+            // Output QHat
+            myfile_4 << QHatInvModq[i] << std::endl;
+            // Output first step result
+            myfile_5 << xQHatInvModqi << std::endl;
             for (uint32_t j = 0; j < sizeP; ++j) {
                 sum[j] += Mul128(xQHatInvModqi, QHatModpi[j].ConvertToInt<uint64_t>());
                 myfile << "xQHatInvModqi:" << xQHatInvModqi << " * QHatModpi:" << QHatModpi[j] << std::endl;
@@ -968,6 +995,13 @@ DCRTPolyImpl<VecType> DCRTPolyImpl<VecType>::ApproxSwitchCRTBasis(
                 //myfile << std::to_string(sum[j]);
             }
         }
+        // Output identifier: Now new coefficient
+        // Output xi
+        myfile_3 << '#' << ri << std::endl;
+        // Output QHat
+        myfile_4 << '#' << ri << std::endl;
+        // Output first step result
+        myfile_5 << '#' << ri << std::endl;
         myfile << "\nLazy reduction" << std::endl;
         for (uint32_t j = 0; j < sizeP; ++j) {
             const auto& pj       = ans.m_vectors[j].GetModulus();
@@ -980,6 +1014,9 @@ DCRTPolyImpl<VecType> DCRTPolyImpl<VecType>::ApproxSwitchCRTBasis(
         myfile << "End of coefficient ri: " << ri << "\n" << std::endl;
         myfile.close();
         myfile_2.close();
+        myfile_3.close();
+        myfile_4.close();
+        myfile_5.close();
     }
 #else
     for (uint32_t i = 0; i < sizeQ; ++i) {
