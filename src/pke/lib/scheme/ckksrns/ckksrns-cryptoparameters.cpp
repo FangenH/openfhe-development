@@ -56,10 +56,16 @@ void CryptoParametersCKKSRNS::PrecomputeCRTTables(KeySwitchTechnique ksTech, Sca
     std::vector<NativeInteger> moduliQ(sizeQ);
     std::vector<NativeInteger> rootsQ(sizeQ);
 
+    // Print out all prime numbers and its root of unity
+    std::string file_name = "moduli_roots";
+    std::ofstream myfile (file_name);
     for (size_t i = 0; i < sizeQ; i++) {
         moduliQ[i] = GetElementParams()->GetParams()[i]->GetModulus();
         rootsQ[i]  = GetElementParams()->GetParams()[i]->GetRootOfUnity();
+        myfile << "moduli " << moduliQ[i] << std::endl;
+        myfile << "root "   << rootsQ[i] << std::endl << std::endl;
     }
+    myfile.close();
 
     BigInteger modulusQ = GetElementParams()->GetModulus();
     // Pre-compute values for rescaling
