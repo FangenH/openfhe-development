@@ -76,6 +76,7 @@ void CryptoParametersRNS::PrecomputeCRTTables(KeySwitchTechnique ksTech, Scaling
 
         // Compute ceil(sizeQ/numPartQ), the # of towers per digit
         uint32_t a = static_cast<uint32_t>(std::ceil(static_cast<double>(sizeQ) / numPartQ));
+        std::cout << "There are " << a << " towers per digit" << std::endl;
         if (sizeQ <= (a * (numPartQ - 1))) {
             auto str = "HYBRID key switching parameters: Can't appropriately distribute " + std::to_string(sizeQ) +
                        " towers into " + std::to_string(numPartQ) +

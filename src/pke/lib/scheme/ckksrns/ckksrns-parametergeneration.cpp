@@ -244,6 +244,8 @@ bool ParameterGenerationCKKSRNS::ParamsGenCKKSRNS(std::shared_ptr<CryptoParamete
 
     cryptoParamsCKKSRNS->SetElementParams(paramsDCRT);
 
+    std::cout << "Generating CKKS parameters" << std::endl;
+
     // if no batch size was specified, we set batchSize = n/2 by default (for full packing)
     if (encodingParams->GetBatchSize() == 0) {
         uint32_t batchSize = n / 2;
