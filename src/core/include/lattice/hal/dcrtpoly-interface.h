@@ -888,6 +888,8 @@ public:
    */
     virtual BigIntType GetWorkingModulus() const = 0;
 
+    virtual void SelfDefinedPrint() const = 0;
+
     /**
    * @brief Returns the element parameters for DCRTPoly elements in an extended
    * CRT basis, which is the concatenation of the towers currently in "this"

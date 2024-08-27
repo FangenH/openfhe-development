@@ -382,6 +382,8 @@ std::shared_ptr<std::vector<DCRTPoly>> KeySwitchHYBRID::EvalKeySwitchPrecomputeC
 
     for (uint32_t part = 0; part < numPartQl; part++) {
         auto partCtClone = partsCt[part].Clone();
+
+        partCtClone.SelfDefinedPrint();
         // Perform iNTT?
         partCtClone.SetFormat(Format::COEFFICIENT);
 
