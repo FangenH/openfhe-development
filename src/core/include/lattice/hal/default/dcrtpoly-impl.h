@@ -944,26 +944,43 @@ DCRTPolyImpl<VecType> DCRTPolyImpl<VecType>::ApproxSwitchCRTBasis(
         std::string name_2 = "postmultiply_";
         std::string name_3 = "xi_";
         std::string name_4 = "first_step_";
+        std::string name_5 = "extended_xi";
         name = name + std::to_string(i);
         name_2 = name_2 + std::to_string(i);
         name_3 = name_3 + std::to_string(i);
         name_4 = name_4 + std::to_string(i);
+        name_5 = name_5 + std::to_string(i);
         std::ofstream file(name);
         std::ofstream file_2(name_2);
         std::ofstream file_3(name_3);
         std::ofstream file_4(name_4);
+        std::ofstream file_5(name_5);
         file.close();
         file_2.close();
         file_3.close();
         file_4.close();
+        file_5.close();
     }
-    // Print all QHat: only # sizeQ
+    // Print all QHatInvModq: only # sizeQ (alpha)
     std::string name = "QHatInvModq";
     std::ofstream myfile (name);
     for (uint32_t i = 0; i < sizeQ; ++i){
         myfile << QHatInvModq[i] << std::endl;
     }
     myfile.close();
+
+    // Print all QHatModpi: Matrix (sizeQ * sizeP)
+    // But we might want it in the transposed order(sizeP * sizeQ)
+    std::string name_2 = "QHatModpi";
+    std::ofstream myfile_2 (name_2);
+    for (uint32_t i = 0; i < sizeQ; ++i){
+        myfile_2 << '#' << i << std::endl;
+        for (uint32_t j = 0; j < sizeP; ++j){
+            myfile_2 << QHatModp[i][j] << std::endl;
+        }
+    }
+    myfile_2.close();
+
     // Matrix multiplication
     // For reference
     #pragma omp parallel for firstprivate(sum) num_threads(OpenFHEParallelControls.GetThreadLimit(8))
@@ -995,7 +1012,7 @@ DCRTPolyImpl<VecType> DCRTPolyImpl<VecType>::ApproxSwitchCRTBasis(
             myfile << "Coefficient :" << ri << std::endl;
             myfile << "Step 1:" << std::endl;
             myfile << "xi is:" << xi << " Modulus is :" << qi << std::endl;
-            myfile << "QHat is:" << QHatInvModq[i] << std::endl;
+            myfile << "QHatInvModq is:" << QHatInvModq[i] << std::endl;
             myfile << "Result of step 1 is " << xQHatInvModqi << std::endl;
             myfile << "\nStep 2:" << std::endl;
             myfile_2 << xQHatInvModqi << std::endl;
