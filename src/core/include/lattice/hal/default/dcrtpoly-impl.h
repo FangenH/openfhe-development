@@ -944,7 +944,7 @@ DCRTPolyImpl<VecType> DCRTPolyImpl<VecType>::ApproxSwitchCRTBasis(
         std::string name_2 = "postmultiply_";
         std::string name_3 = "xi_";
         std::string name_4 = "first_step_";
-        std::string name_5 = "extended_xi";
+        std::string name_5 = "extended_xi_";
         name = name + std::to_string(i);
         name_2 = name_2 + std::to_string(i);
         name_3 = name_3 + std::to_string(i);
@@ -990,17 +990,24 @@ DCRTPolyImpl<VecType> DCRTPolyImpl<VecType>::ApproxSwitchCRTBasis(
         std::string name_2 = "postmultiply_";
         std::string name_3 = "xi_";
         std::string name_4 = "first_step_";
+        std::string name_5 = "extended_xi_";
         name = name + std::to_string(omp_get_thread_num());
         name_2 = name_2 + std::to_string(omp_get_thread_num());
         name_3 = name_3 + std::to_string(omp_get_thread_num());
         name_4 = name_4 + std::to_string(omp_get_thread_num());
+        name_5 = name_5 + std::to_string(omp_get_thread_num());
         std::ofstream myfile (name, std::ios_base::app);
         std::ofstream myfile_2 (name_2, std::ios_base::app);
         std::ofstream myfile_3 (name_3, std::ios_base::app);
         std::ofstream myfile_4 (name_4, std::ios_base::app);
+        std::ofstream myfile_5 (name_5, std::ios_base::app);
         myfile << "Ring dimension is " << ringDim << "\nSize Q:" << sizeQ << "\nSize P is:" << sizeP << std::endl;
         myfile << "This is number of thread :" << omp_get_thread_num() << std::endl;
         myfile_2 << "Ring element index: " << ri << std::endl;
+        // Output xi
+        myfile_3 << '#' << ri << std::endl;
+        // Output first step result
+        myfile_4 << '#' << ri << std::endl;
         for (uint32_t i = 0; i < sizeQ; ++i) {
             const auto& qi        = m_vectors[i].GetModulus();
             const auto& xi        = m_vectors[i][ri];
@@ -1029,11 +1036,8 @@ DCRTPolyImpl<VecType> DCRTPolyImpl<VecType>::ApproxSwitchCRTBasis(
             }
         }
         // Output identifier: Now new coefficient
-        // Output xi
-        myfile_3 << '#' << ri << std::endl;
-        // Output first step result
-        myfile_4 << '#' << ri << std::endl;
         myfile << "\nLazy reduction" << std::endl;
+        myfile_5 << '#' << ri << std::endl;
         for (uint32_t j = 0; j < sizeP; ++j) {
             const auto& pj       = ans.m_vectors[j].GetModulus();
             // Also lazy reduction here. -- Step 2.
@@ -1041,12 +1045,14 @@ DCRTPolyImpl<VecType> DCRTPolyImpl<VecType>::ApproxSwitchCRTBasis(
             //myfile << "Channel " << j << " Before reduction is: " << sum[j] << std::endl;
             myfile << "Current sum of channel " << j << " is :" << static_cast<uint64_t>(sum[j]>>64) << static_cast<uint64_t>(sum[j]) << std::endl;
             myfile << "Modulus :" << pj << " After reduction: " << ans.m_vectors[j][ri] << std::endl;
+            myfile_5 << ans.m_vectors[j][ri] << std::endl;
         }
         myfile << "End of coefficient ri: " << ri << "\n" << std::endl;
         myfile.close();
         myfile_2.close();
         myfile_3.close();
         myfile_4.close();
+        myfile_5.close();
     }
 #else
     for (uint32_t i = 0; i < sizeQ; ++i) {
