@@ -888,7 +888,7 @@ public:
    */
     virtual BigIntType GetWorkingModulus() const = 0;
 
-    virtual void SelfDefinedPrint() const = 0;
+    virtual void SelfDefinedPrint(const std::string file_name_prefix, const uint32_t num) const = 0;
 
     /**
    * @brief Returns the element parameters for DCRTPoly elements in an extended

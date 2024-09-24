@@ -383,7 +383,8 @@ std::shared_ptr<std::vector<DCRTPoly>> KeySwitchHYBRID::EvalKeySwitchPrecomputeC
     for (uint32_t part = 0; part < numPartQl; part++) {
         auto partCtClone = partsCt[part].Clone();
 
-        partCtClone.SelfDefinedPrint();
+        const std::string file_name_intt = "ciphertext_evaluation_";
+        partCtClone.SelfDefinedPrint(file_name_intt, alpha);
         // Perform iNTT?
         partCtClone.SetFormat(Format::COEFFICIENT);
 
@@ -399,6 +400,9 @@ std::shared_ptr<std::vector<DCRTPoly>> KeySwitchHYBRID::EvalKeySwitchPrecomputeC
 
         // Perform NTT?
         partsCtCompl[part].SetFormat(Format::EVALUATION);
+
+        const std::string file_name_ntt = "extended_limb_";
+        partsCtCompl[part].SelfDefinedPrint(file_name_ntt, alpha);
 
         partsCtExt[part] = DCRTPoly(paramsQlP, Format::EVALUATION, true);
 

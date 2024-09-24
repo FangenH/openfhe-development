@@ -912,11 +912,11 @@ void DCRTPolyImpl<VecType>::TimesQovert(const std::shared_ptr<Params>& paramsQ,
 // Add a function that belongs to the same class (Have access to protected view),
 // which is essentially printing out values.
 template <typename VecType>
-void DCRTPolyImpl<VecType>::SelfDefinedPrint() const {
+void DCRTPolyImpl<VecType>::SelfDefinedPrint(const std::string file_name_prefix, const uint32_t num) const {
     // ~ shall be protected within this context, but I changed it for the ease of use.
     uint32_t ringDim = m_params->GetRingDimension();
-    std::string file_name_prefix = "ciphertext_evaluation_";
-    for (uint32_t j = 0; j < 5; ++j){
+    //std::string file_name_prefix = "ciphertext_evaluation_";
+    for (uint32_t j = 0; j < num; ++j){
         std::string file_name;
         file_name = file_name_prefix + std::to_string(j);
         std::ofstream myfile (file_name);
@@ -938,6 +938,15 @@ DCRTPolyImpl<VecType> DCRTPolyImpl<VecType>::ApproxSwitchCRTBasis(
 #if defined(HAVE_INT128) && NATIVEINT == 64
     uint32_t ringDim = m_params->GetRingDimension();
     std::vector<DoubleNativeInt> sum(sizeP);
+
+    std::string file_name = "moduli_roots_fbc";
+    std::ofstream myfile_moduli (file_name);
+    for (size_t i = 0; i < sizeP; i++) {
+        myfile_moduli << "moduli " << ans.m_vectors[i].GetModulus() << std::endl;
+        myfile_moduli << "root " << ans.m_vectors[i].GetRootOfUnity() << std::endl;
+    }
+    myfile_moduli.close();
+
     // Create empty files
     for (int i=0; i < 8; i++) {
         std::string name = "example_output_";
