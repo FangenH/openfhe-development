@@ -912,15 +912,16 @@ void DCRTPolyImpl<VecType>::TimesQovert(const std::shared_ptr<Params>& paramsQ,
 // Add a function that belongs to the same class (Have access to protected view),
 // which is essentially printing out values.
 template <typename VecType>
-void DCRTPolyImpl<VecType>::SelfDefinedPrint(const std::string file_name_prefix, const uint32_t num) const {
+void DCRTPolyImpl<VecType>::SelfDefinedPrint(const std::string file_name_prefix) const {
     // ~ shall be protected within this context, but I changed it for the ease of use.
     uint32_t ringDim = m_params->GetRingDimension();
+    uint32_t num = m_vectors.size();
     //std::string file_name_prefix = "ciphertext_evaluation_";
-    for (uint32_t j = 0; j < num; ++j){
+    for (uint32_t j = 0; j < num; j++){
         std::string file_name;
         file_name = file_name_prefix + std::to_string(j);
         std::ofstream myfile (file_name);
-        for (uint32_t i = 0; i < ringDim; ++i){
+        for (uint32_t i = 0; i < ringDim; i++){
             myfile << m_vectors[j][i] << std::endl;
         }
         myfile.close();

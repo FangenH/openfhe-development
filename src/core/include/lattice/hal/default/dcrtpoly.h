@@ -228,7 +228,7 @@ public:
                      const NativeInteger& t, const NativeInteger& NegQModt,
                      const NativeInteger& NegQModtPrecon) override;
 
-    void SelfDefinedPrint(const std::string file_name_prefix, const uint32_t num) const;
+    void SelfDefinedPrint(const std::string file_name_prefix) const;
     
     DCRTPolyType ApproxSwitchCRTBasis(const std::shared_ptr<Params>& paramsQ, const std::shared_ptr<Params>& paramsP,
                                       const std::vector<NativeInteger>& QHatInvModq,

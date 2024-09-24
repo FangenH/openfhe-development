@@ -97,7 +97,7 @@ int main() {
    * being used for these parameters. Give ring dimension N, the maximum batch
    * size is N/2, because of the way CKKS works.
    */
-    uint32_t batchSize = 16;
+    uint32_t batchSize = 32768;
 
     /* A4) Desired security level based on FHE standards.
    * This parameter can take four values. Three of the possible values
@@ -169,15 +169,23 @@ int main() {
     // Step 3: Encoding and encryption of inputs
 
     // Inputs
-    std::vector<double> x1 = {0.25, 0.5, 0.75, 1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0, 11.0, 12.0, 13.0};
-    std::vector<double> x2 = {5.0, 4.0, 3.0, 2.0, 1.0, 0.75, 0.5, 0.25, 5.0, 4.0, 3.0, 2.0, 1.0, 0.75, 0.5, 0.25};
+    //std::vector<double> x1 = {0.25, 0.5, 0.75, 1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0, 11.0, 12.0, 13.0};
+    //std::vector<double> x2 = {5.0, 4.0, 3.0, 2.0, 1.0, 0.75, 0.5, 0.25, 5.0, 4.0, 3.0, 2.0, 1.0, 0.75, 0.5, 0.25};
+
+    std::vector<double> x1;
+    std::vector<double> x2;
+
+    for (uint32_t i=0; i < batchSize; i++){
+      x1.push_back(i * 0.5);
+      x2.push_back(i * 0.25);
+    }
 
     // Encoding as plaintexts
     Plaintext ptxt1 = cc->MakeCKKSPackedPlaintext(x1);
     Plaintext ptxt2 = cc->MakeCKKSPackedPlaintext(x2);
 
-    std::cout << "Input x1: " << ptxt1 << std::endl;
-    std::cout << "Input x2: " << ptxt2 << std::endl;
+    //std::cout << "Input x1: " << ptxt1 << std::endl;
+    //std::cout << "Input x2: " << ptxt2 << std::endl;
 
     // Encrypt the encoded vectors
     auto c1 = cc->Encrypt(keys.publicKey, ptxt1);
